@@ -6,6 +6,7 @@ import { Mask } from './mask';
 import { Status } from './status';
 import { IInterrupt } from '../api/interrupt';
 import { IMapper } from '../api/mapper';
+import { appendFileSync } from 'fs';
 
 enum Register {
   PPUCTRL = 0x2000, // RW
@@ -105,8 +106,33 @@ export class PPU implements IPPU {
     private readonly onFrame: (frame: Uint8Array) => void, // frame: PPU palette pixels
   ) {}
 
+  private writeLog() {
+    const log = [
+      `F:${this.frame || 0}`,
+      `C:${this.cycle || 0}`,
+      `S:${this.scanLine || 0}`,
+      `N:${this.nmiDelay || 0}`,
+      `R.V:${this.register.v || 0}`,
+      `R.T:${this.register.t || 0}`,
+      `R.X:${this.register.x || 0}`,
+      `R.W:${this.register.w || 0}`,
+      `L.NT:${this.latchs.nameTable || 0}`,
+      `L.AT:${this.latchs.attributeTable || 0}`,
+      `L.LBTB:${this.latchs.lowBackgorundTailByte || 0}`,
+      `L.HBTB:${this.latchs.highBackgorundTailByte || 0}`,
+      `SR.LBTB:${this.shiftRegister.lowBackgorundTailBytes || 0}`,
+      `SR.HBTB:${this.shiftRegister.highBackgorundTailBytes || 0}`,
+      `SR.LBAB:${this.shiftRegister.lowBackgroundAttributeByes || 0}`,
+      `SR.HBAB:${this.shiftRegister.highBackgroundAttributeByes || 0}`,
+      `STATUS:${this.status.data}\n`
+    ].join(' ')
+
+    appendFileSync("./log.log", log);
+  }
   // PPU timing: https://wiki.nesdev.com/w/images/4/4f/Ppu.svg
   public clock(): void {
+    this.writeLog()
+
     // For odd frames, the cycle at the end of the scanline is skipped (this is done internally by jumping directly from (339,261) to (0,0)
     // However, this behavior can be bypassed by keeping rendering disabled until after this scanline has passed
     if (this.scanLine === 261 && this.cycle === 339 && this.frame & 0x01 && (this.mask.isShowBackground || this.mask.isShowSprite)) {
@@ -368,8 +394,8 @@ export class PPU implements IPPU {
       this.cycle = 0;
       this.scanLine++;
       if (this.scanLine > 261) {
-        this.scanLine = 0;
         this.frame++;
+        this.scanLine = 0;
 
         this.onFrame(this.pixels);
       }

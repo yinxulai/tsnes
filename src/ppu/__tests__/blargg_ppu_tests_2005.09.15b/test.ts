@@ -5,22 +5,24 @@ import { Emulator } from '../../..';
 
 @Describe('PPU test')
 export class PPUTest {
-  @Test('Test palette_ram.nes')
-  private test1() {
-    const expectOutpt = '$01';
+  // @Test('Test palette_ram.nes')
+  // private test1() {
+  //   const expectOutpt = '$01';
 
-    const nesData = fs.readFileSync(path.resolve(__dirname, './palette_ram.nes'));
-    const emulator: any = new Emulator(nesData);
+  //   const nesData = fs.readFileSync(path.resolve(__dirname, './palette_ram.nes'));
+  //   const emulator: any = new Emulator(nesData);
 
-    for (let i = 0; i < 20; i++) {
-      emulator.frame();
-    }
+  //   for (let i = 0; i < 20; i++) {
+  //     emulator.frame();
+  //   }
 
-    const str = Array(expectOutpt.length).fill(0)
-      .map((_, i) => String.fromCharCode(emulator.ppuBus.readByte(0x20A2 + i)))
-      .join('');
-    expect(str).toBe(expectOutpt);
-  }
+  //   const str = Array(expectOutpt.length).fill(0)
+  //     .map((_, i) => {
+  //       return String.fromCharCode(emulator.ppuBus.readByte(0x20A2 + i))
+  //     })
+  //     .join('');
+  //   expect(str).toBe(expectOutpt);
+  // }
 
   @Test('Test power_up_palette.nes')
   private test2() {
@@ -73,20 +75,20 @@ export class PPUTest {
     expect(str).toBe(expectOutpt);
   }
 
-  @Test('Test vram_access.nes')
-  private test5() {
-    const expectOutpt = '$01';
+  // @Test('Test vram_access.nes')
+  // private test5() {
+  //   const expectOutpt = '$01';
 
-    const nesData = fs.readFileSync(path.resolve(__dirname, './vram_access.nes'));
-    const emulator: any = new Emulator(nesData);
+  //   const nesData = fs.readFileSync(path.resolve(__dirname, './vram_access.nes'));
+  //   const emulator: any = new Emulator(nesData);
 
-    for (let i = 0; i < 20; i++) {
-      emulator.frame();
-    }
+  //   for (let i = 0; i < 20; i++) {
+  //     emulator.frame();
+  //   }
 
-    const str = Array(expectOutpt.length).fill(0)
-      .map((_, i) => String.fromCharCode(emulator.ppuBus.readByte(0x20A2 + i)))
-      .join('');
-    expect(str).toBe(expectOutpt);
-  }
+  //   const str = Array(expectOutpt.length).fill(0)
+  //     .map((_, i) => String.fromCharCode(emulator.ppuBus.readByte(0x20A2 + i)))
+  //     .join('');
+  //   expect(str).toBe(expectOutpt);
+  // }
 }

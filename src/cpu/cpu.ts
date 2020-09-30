@@ -174,6 +174,7 @@ export class CPU implements ICPU {
   }
 
   private step(): void {
+    
     const opcode = this.bus.readByte(this.registers.PC++);
     const entry = OPCODE_TABLE[opcode];
     if (!entry) {

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "test": "jest",
+    "test": "jest src/ppu/__tests__/blargg_ppu_tests_2005.09.15b/test.ts",
     "build": "webpack"
   },
   "devDependencies": {

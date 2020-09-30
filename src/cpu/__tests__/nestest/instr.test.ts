@@ -28,7 +28,7 @@ class TestInstructions {
 
   @Test('Test all instruction')
   private test() {
-    for (let instr = 0; instr < 10;) {
+    for (let instr = 0; instr < 7000;) {
       if (this.emulator.cpu.deferCycles === 0) {
         instr++;
 
@@ -42,7 +42,7 @@ class TestInstructions {
         const PPU = [this.emulator.ppu.cycle, this.emulator.ppu.scanLine];
 
         const log = sprintf('%04X A:%02X X:%02X Y:%02X P:%02X SP:%02X PPU:%3d,%3d CYC:%d',
-          PC, A, X, Y, P, SP, PPU[0], PPU[1], CYC);
+          PC, A, X, Y, P | 1 << 5, SP, PPU[0], PPU[1], CYC);
         const cmpLog = this.logs[instr - 1].substring(0, 4) + ' ' + this.logs[instr - 1].substring(48);
 
         expect(log.trim()).toMatch(cmpLog.trim());
